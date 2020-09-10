@@ -20,8 +20,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import EditIcon from '@material-ui/icons/Edit';
 
-function createData(name, calories, fat, carbs, protein) {
-	return { name, calories, fat, carbs, protein };
+function createData(title, content, id, dateCreated, lastUpdated) {
+	return { title, content, id, dateCreated, lastUpdated };
 }
 
 const rows = [
@@ -67,11 +67,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-	{ id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-	{ id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-	{ id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-	{ id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-	{ id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+	{ id: 'title', numeric: false, disablePadding: true, label: 'Title' },
+	{ id: 'content', numeric: true, disablePadding: false, label: 'Content' },
+	{ id: 'userId', numeric: true, disablePadding: false, label: 'UserID' },
+	{ id: 'dateCreated', numeric: true, disablePadding: false, label: 'Date Created' },
+	{ id: 'lastUpdated', numeric: true, disablePadding: false, label: 'Last Updated' },
 ];
 
 function EnhancedTableHead(props) {
@@ -183,7 +183,7 @@ const EnhancedTableToolbar = (props) => {
 					id="tableTitle"
 					component="div"
 				>
-					Nutrition
+					All Posts
 				</Typography>
 			)}
 
@@ -351,17 +351,17 @@ export default function EnhancedTable() {
 												scope="row"
 												padding="none"
 											>
-												{row.name}
+												{row.title}
 											</TableCell>
 											<TableCell align="right">
-												{row.calories}
+												{row.content}
 											</TableCell>
-											<TableCell align="right">{row.fat}</TableCell>
+											<TableCell align="right">{row.userId}</TableCell>
 											<TableCell align="right">
-												{row.carbs}
+												{row.dateCreated}
 											</TableCell>
 											<TableCell align="right">
-												{row.protein}
+												{row.lastUpdated}
 											</TableCell>
 										</TableRow>
 									);

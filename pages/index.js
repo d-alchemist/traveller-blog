@@ -77,6 +77,5 @@ export async function getStaticProps() {
 		props: {
 			posts,
 		},
-		unstable_revalidate: 1, // In seconds
 	};
 }

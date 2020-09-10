@@ -40,7 +40,7 @@ function AdminDrawer() {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<Header isHomepage={false} />
+			<Header isDashboard={true} />
 			<main className={classes.content}>
 				<Toolbar />
 				<div className={classes.heading}>
@@ -64,10 +64,6 @@ function AdminDrawer() {
 }
 
 AdminDrawer.propTypes = {
-	/**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
 	container: PropTypes.any,
 };
 

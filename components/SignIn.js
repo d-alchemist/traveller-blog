@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -7,6 +7,8 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import fetch, { FetchError } from 'node-fetch';
+import AuthToken from '../src/authtoken';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -34,12 +36,24 @@ export default function SignIn() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
+	const emailInput = useRef(null)
+	const passwordInput = useRef(null)
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (email.length && password.length) {
-			console.log(email, password);
+			postLogin({ email: email, password: password });
+			return;
 		}
-		console.error('error')
+		handleError();
+	};
+
+	const handleKeyPress = (e) => {
+		if (e.key === 'Enter') handleSubmit;
+	}
+
+	const handleError = () => {
+		emailInput.current.setAttribute('error', '');
 	}
 
 	return (
@@ -56,9 +70,12 @@ export default function SignIn() {
 					id="email"
 					label="Email Address"
 					name="email"
+					type="email"
 					autoComplete="email"
 					autoFocus
+					onKeyPress={handleKeyPress}
 					onChange={(e) => setEmail(e.target.value)}
+					ref={emailInput}
 				/>
 				<TextField
 					variant="outlined"
@@ -70,6 +87,8 @@ export default function SignIn() {
 					type="password"
 					id="password"
 					autoComplete="current-password"
+					ref={passwordInput}
+					onKeyPress={handleKeyPress}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<FormControlLabel
@@ -96,3 +115,23 @@ export default function SignIn() {
 		</React.Fragment>
 	);
 }
+
+export const postLogin = async (input) => {
+	// const data = new URLSearchParams(input);
+	const result = await fetch(`https://kh-blog-app.herokuapp.com/login`, {
+		method: 'post',
+		body: JSON.stringify(input),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+	result.json()
+		.then((res) => { 
+			if (res.email === input.email && res.token) {
+				AuthToken.storeToken(res.token);
+				return 'success';
+			} else {
+				//Error handling
+			}
+		})
+};
