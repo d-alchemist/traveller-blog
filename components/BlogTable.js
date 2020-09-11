@@ -299,7 +299,6 @@ export default function EnhancedTable({ posts }) {
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
-		console.log(selected);
 
 		if (selectedIndex === -1) {
 			newSelected = newSelected.concat(selected, id);

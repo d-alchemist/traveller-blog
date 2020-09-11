@@ -196,7 +196,7 @@ export const postLogin = async (input) => {
 	});
 	return result.json().then((res) => {
 		if (res.email === input.email && res.token) {
-			localStorage.setItem('myblogdata', res.token);
+			sessionStorage.setItem('myblogdata', res.token);
 			AuthToken.storeToken(res.token);
 			return true;
 		} else if (res.message === 'You are not registered!') {
