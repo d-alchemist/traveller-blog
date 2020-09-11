@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
-import { store } from '../services/store';
 
 
 import Header from '../components/Header';
@@ -39,14 +38,6 @@ function AdminDrawer({ posts }) {
 		e.preventDefault();
 		router.push('/newpost');
 	};
-
-	const globalStore = useContext(store);
-
-	useEffect(() => {
-		if (globalStore.state.isLoggedIn === false) {
-			router.push('/', undefined, { shallow: true });
-		}
-	}, [])
 	
 	return (
 		<div className={classes.root}>
