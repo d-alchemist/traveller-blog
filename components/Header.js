@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Link from '../components/Link';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -58,6 +57,18 @@ const useStyles = makeStyles((theme) => ({
 			textDecoration: 'none',
 		},
 	},
+	logbutton: {
+		fontSize: '1rem',
+		fontFamily: 'inherit',
+		fontWeight: 400,
+		padding: '10px 15px',
+		letterSpacing: 1,
+		transition: 'color .2s linear',
+		textDecoration: 'none',
+		'&:hover': {
+			color: '#fff'
+		}
+	}
 }));
 
 export default function Header(props) {
@@ -67,23 +78,19 @@ export default function Header(props) {
 	const clearCookie = () => {
 		Cookie.remove('travel_storage__cookie');
 		router.push('/');
-	}
-	
+	};
+
 	const LoginButton = () => (
-		<Button color="inherit">
-			<Link href="/login" color="primary">
-				Login
-			</Link>
-		</Button>
-	)
-	
+		<Link href="/login" color="primary" className={classes.logbutton}>
+			Login
+		</Link>
+	);
+
 	const LogOutButton = () => (
-		<Button color="inherit">
-			<Link href="/" onClick={clearCookie} color="primary">
-				Logout
-			</Link>
-		</Button>
-	)
+		<Link href="/" onClick={clearCookie} color="primary" className={classes.logbutton}>
+			Logout
+		</Link>
+	);
 
 	return (
 		<ElevationScroll {...props}>
@@ -96,10 +103,10 @@ export default function Header(props) {
 					</Typography>
 					{props.isHomepage ? (
 						<LoginButton />
+					) : props.isDashboard ? (
+						<LogOutButton />
 					) : (
-						props.isDashboard ? (
-							<LogOutButton />
-						) : ''
+						''
 					)}
 				</Toolbar>
 			</AppBar>

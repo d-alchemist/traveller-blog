@@ -46,7 +46,7 @@ export default function Index({ posts }) {
 			<Toolbar />
 			<Box component="div" className={classes.hero}>
 				<Typography variant="h1" component="h1">
-					Travellers Blog
+					Travel Blog
 				</Typography>
 			</Box>
 			<Container className={classes.blogContainer}>

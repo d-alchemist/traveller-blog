@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import fetch from 'node-fetch';
 import { green, red } from '@material-ui/core/colors';
+
 import { AuthToken } from '../services/authtoken';
 import { validateEmail } from '../services/validateEmail';
 
@@ -185,7 +186,6 @@ export default function SignIn() {
 }
 
 export const postLogin = async (input) => {
-	// const data = new URLSearchParams(input);
 	const result = await fetch(`https://kh-blog-app.herokuapp.com/login`, {
 		method: 'post',
 		body: JSON.stringify(input),

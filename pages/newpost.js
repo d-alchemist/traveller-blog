@@ -86,7 +86,7 @@ export default function newpost() {
 			body: JSON.stringify(body),
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('myblogdata')}`,
+				Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
 			},
 		})
 			.then((res) => res.json())

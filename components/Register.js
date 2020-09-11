@@ -12,8 +12,6 @@ import clsx from 'clsx';
 import { green, red } from '@material-ui/core/colors';
 import { validateEmail } from '../services/validateEmail';
 
-
-
 const useStyles = makeStyles((theme) => ({
 	paper: {
 		marginTop: theme.spacing(8),
@@ -149,7 +147,7 @@ export default function Register() {
 				/>
 				{success === false ? (
 					<Typography
-						style={{ textAlign: "center", color: "#e73535" }}
+						style={{ textAlign: 'center', color: '#e73535' }}
 						variant="subtitle2"
 						display="block"
 						gutterBottom

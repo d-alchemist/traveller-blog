@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import EditIcon from '@material-ui/icons/Edit';
 import fetch from 'node-fetch';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useRouter } from 'next/router';
 
 function descendingComparator(a, b, orderBy) {
@@ -151,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
 				method: 'DELETE',
 				headers: {
 					'Content-type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('myblogdata')}`,
+					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
 				},
 			});
 		});
@@ -164,6 +165,12 @@ const EnhancedTableToolbar = (props) => {
 			query: { id: `${id}` },
 		});
 	};
+
+	const handleView = () => {
+		router.push({
+			pathname: `/posts/${id}`
+		})
+	}
 
 	return (
 		<Toolbar
@@ -205,11 +212,18 @@ const EnhancedTableToolbar = (props) => {
 				</Tooltip>
 			)}
 			{numSelected === 1 ? (
+				<React.Fragment>
 				<Tooltip title="Edit Post">
 					<IconButton aria-label="edit" onClick={handleEdit}>
 						<EditIcon />
 					</IconButton>
 				</Tooltip>
+				<Tooltip title="View Post">
+					<IconButton aria-label="view post" onClick={handleView}>
+						<VisibilityIcon />
+					</IconButton>
+				</Tooltip>
+				</React.Fragment>
 			) : (
 				''
 			)}
