@@ -1,10 +1,18 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { AuthToken } from '../services/authtoken';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import fetch from 'node-fetch';
+import clsx from 'clsx';
+import { green, red } from '@material-ui/core/colors';
+import { validateEmail } from '../services/validateEmail';
+
+
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -24,6 +32,31 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
+	wrapper: {
+		margin: theme.spacing(1),
+		position: 'relative',
+	},
+	buttonProgress: {
+		color: green[500],
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		marginTop: -12,
+		marginLeft: -12,
+		margin: theme.spacing(3, 0, 2),
+	},
+	buttonSuccess: {
+		backgroundColor: green[500],
+		'&:hover': {
+			backgroundColor: green[700],
+		},
+	},
+	buttonFailure: {
+		backgroundColor: red[500],
+		'&:hover': {
+			backgroundColor: red[700],
+		},
+	},
 }));
 
 export default function Register() {
@@ -33,13 +66,38 @@ export default function Register() {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
+	const [loading, setLoading] = React.useState(false);
+	const [success, setSuccess] = React.useState(null);
+
+	const buttonClassname = clsx({
+		[classes.buttonSuccess]: success,
+		[classes.buttonFailure]: success === false,
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (email.length && username.length && password.length) {
-			console.log(email, username, length)
+
+		if (validateEmail(email) === false) {
+			setSuccess(false);
+			return;
 		}
-		console.error('error')
-	}
+
+		if (email.length && username.length && password.length) {
+			setLoading(true);
+			postRegister({ email, password, username }).then((res) => {
+				if (res === true) {
+					setSuccess(true);
+					setLoading(false);
+				}
+				if (res === false) {
+					setSuccess(false);
+					setLoading(false);
+				}
+			});
+			return;
+		}
+		setSuccess(false);
+	};
 
 	return (
 		<React.Fragment>
@@ -60,6 +118,7 @@ export default function Register() {
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<TextField
+					error={success === false}
 					variant="outlined"
 					margin="normal"
 					required
@@ -67,10 +126,12 @@ export default function Register() {
 					id="email"
 					label="Email Address"
 					name="email"
+					type="email"
 					autoComplete="email"
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<TextField
+					error={success === false}
 					variant="outlined"
 					margin="normal"
 					required
@@ -79,23 +140,62 @@ export default function Register() {
 					label="Password"
 					type="password"
 					id="password"
-					autoComplete="current-password"
+					autoComplete="new-password"
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<FormControlLabel
 					control={<Checkbox value="remember" color="primary" />}
 					label="Remember me"
 				/>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-				>
-					Register
-				</Button>
+				{success === false ? (
+					<Typography
+						style={{ textAlign: "center", color: "#e73535" }}
+						variant="subtitle2"
+						display="block"
+						gutterBottom
+					>
+						Enter valid details
+					</Typography>
+				) : (
+					''
+				)}
+				<div className={classes.wrapper}>
+					<Button
+						variant="contained"
+						type="submit"
+						fullWidth
+						color="primary"
+						className={buttonClassname}
+						disabled={loading}
+						onClick={handleSubmit}
+					>
+						Sign Up
+					</Button>
+					{loading && (
+						<CircularProgress size={24} className={classes.buttonProgress} />
+					)}
+				</div>
 			</form>
 		</React.Fragment>
 	);
 }
+
+export const postRegister = async (input) => {
+	const result = await fetch(`https://kh-blog-app.herokuapp.com/register`, {
+		method: 'POST',
+		body: JSON.stringify(input),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		timeout: 20000,
+	});
+	return result.json().then((res) => {
+		if (res.email === input.email && res.token) {
+			localStorage.setItem('myblogdata', res.token);
+			AuthToken.storeToken(res.token);
+			return true;
+		} else if (res.message.error === 'User already registered') {
+			return false;
+		}
+	});
+};

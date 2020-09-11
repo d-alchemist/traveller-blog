@@ -39,7 +39,7 @@ Index.propTypes = {
 
 export default function Index({ posts }) {
 	const classes = useStyles();
-
+	
 	return (
 		<React.Fragment>
 			<Header isHomepage={true} />
@@ -72,7 +72,7 @@ export default function Index({ posts }) {
 export async function getStaticProps() {
 	const res = await fetch('https://kh-blog-app.herokuapp.com/api/v1/articles');
 	const posts = await res.json();
-	
+
 	return {
 		props: {
 			posts,

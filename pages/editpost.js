@@ -3,14 +3,14 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
-import { green, red } from '@material-ui/core/colors';
-import { Toolbar } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
-import { useRouter } from 'next/router';
-import fetch from 'node-fetch';
-
 import Header from '../components/Header';
+import { Toolbar } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withRouter, useRouter } from 'next/router';
+import fetch from 'node-fetch';
+import PropTypes from 'prop-types';
+import { green, red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -52,11 +52,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function newpost() {
+editpost.propType = {
+	title: PropTypes.string,
+	content: PropTypes.string,
+};
+
+function editpost({ posts }) {
 	const classes = useStyles();
-	const [postTitle, setPostTitle] = useState('');
-	const [postBody, setPostBody] = useState('');
-	
+	const [postTitle, setPostTitle] = useState(posts.title);
+	const [postBody, setPostBody] = useState(posts.content);
+
 	const [success, setSuccess] = React.useState(null);
 	const [loading, setLoading] = React.useState(false);
 
@@ -66,6 +71,7 @@ export default function newpost() {
 		[classes.buttonSuccess]: success,
 		[classes.buttonFailure]: success === false,
 	});
+
 
 	const handleBackClick = (e) => {
 		e.preventDefault();
@@ -81,8 +87,9 @@ export default function newpost() {
 			return;
 		}
 		setLoading(true);
-		fetch('https://kh-blog-app.herokuapp.com/api/v1/articles', {
-			method: 'post',
+
+		fetch(`https://kh-blog-app.herokuapp.com/api/v1/articles/${posts.id}`, {
+			method: 'put',
 			body: JSON.stringify(body),
 			headers: {
 				'Content-Type': 'application/json',
@@ -111,8 +118,9 @@ export default function newpost() {
 						label="Title"
 						variant="outlined"
 						className={classes.newTitle}
-						onChange={(e) => setPostTitle(e.target.value)}
+						value={postTitle}
 						error={success === false}
+						onChange={(e) => setPostTitle(e.target.value)}
 					/>
 
 					<TextField
@@ -121,9 +129,10 @@ export default function newpost() {
 						multiline
 						rows={15}
 						variant="outlined"
+						value={postBody}
 						className={classes.newBody}
-						onChange={(e) => setPostBody(e.target.value)}
 						error={success === false}
+						onChange={(e) => setPostBody(e.target.value)}
 					/>
 					<div className={classes.buttonContainer}>
 						<Button color="primary" onClick={handleBackClick}>
@@ -138,7 +147,7 @@ export default function newpost() {
 								className={buttonClassname}
 								disabled={loading}
 							>
-								Post
+								Save Changes
 							</Button>
 							{loading && (
 								<CircularProgress
@@ -153,3 +162,13 @@ export default function newpost() {
 		</React.Fragment>
 	);
 }
+
+editpost.getInitialProps = async (context) => {
+	const res = await fetch(
+		`https://kh-blog-app.herokuapp.com/api/v1/articles/${context.query.id}`
+	);
+	const posts = await res.json();
+	return { posts };
+};
+
+export default withRouter(editpost);

@@ -8,6 +8,7 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useRouter } from 'next/router';
+import fetch from 'node-fetch';
 
 import Header from '../components/Header';
 import EnhancedTable from '../components/BlogTable';
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function AdminDrawer() {
+function AdminDrawer({ posts }) {
 	const classes = useStyles();
 
 	const router = useRouter();
@@ -48,7 +49,7 @@ function AdminDrawer() {
 						Welcome,
 					</Typography>
 				</div>
-				<EnhancedTable />
+				<EnhancedTable posts={posts['articles']['data']} />
 				<Tooltip title="Create Post">
 					<Fab
 						color="secondary"
@@ -65,6 +66,19 @@ function AdminDrawer() {
 
 AdminDrawer.propTypes = {
 	container: PropTypes.any,
+	posts: PropTypes.object
 };
+
+export async function getStaticProps() {
+	const res = await fetch('https://kh-blog-app.herokuapp.com/api/v1/articles');
+	const posts = await res.json();
+	
+	return {
+		props: {
+			posts,
+		},
+		unstable_revalidate: 10,
+	};
+}
 
 export default AdminDrawer;

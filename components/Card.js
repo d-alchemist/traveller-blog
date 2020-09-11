@@ -104,7 +104,7 @@ export default function CardComponent({ allPosts }) {
                                         {allPosts.user.username}
                                     </Typography>
                                     <Typography variant="body1" gutterBottom className={classes.avatarSub}>
-                                        {allPosts.user.created_at.split(' ')[0]} - 20min read
+                                        {allPosts.created_at.split(' ')[0]} - 20min read
                                     </Typography>
                                 </div>
                             </div>

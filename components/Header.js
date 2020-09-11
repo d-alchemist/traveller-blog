@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Typography from '@material-ui/core/Typography';
 import Cookie from 'js-cookie';
+import { useRouter } from 'next/router';
 
 function ElevationScroll(props) {
 	const { children, window } = props;
@@ -59,28 +60,30 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const clearCookie = () => {
-	Cookie.remove('travel_storage__cookie');
-}
-
-const LoginButton = () => (
-	<Button color="inherit">
-		<Link href="/login" color="primary">
-			Login
-		</Link>
-	</Button>
-)
-
-const LogOutButton = () => (
-	<Button color="inherit">
-		<Link href="/" onClick={clearCookie} color="primary">
-			Logout
-		</Link>
-	</Button>
-)
-
 export default function Header(props) {
 	const classes = useStyles();
+	const router = useRouter();
+
+	const clearCookie = () => {
+		Cookie.remove('travel_storage__cookie');
+		router.push('/');
+	}
+	
+	const LoginButton = () => (
+		<Button color="inherit">
+			<Link href="/login" color="primary">
+				Login
+			</Link>
+		</Button>
+	)
+	
+	const LogOutButton = () => (
+		<Button color="inherit">
+			<Link href="/" onClick={clearCookie} color="primary">
+				Logout
+			</Link>
+		</Button>
+	)
 
 	return (
 		<ElevationScroll {...props}>

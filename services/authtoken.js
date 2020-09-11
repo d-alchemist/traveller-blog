@@ -2,7 +2,7 @@ import jwtDecode from 'jwt-decode';
 import Cookie from "js-cookie";
 import Router from "next/router";
 
-export default class AuthToken {
+export class AuthToken {
 
 	decodeToken;
 
@@ -17,7 +17,8 @@ export default class AuthToken {
 	}
 
 	get authorizationString() {
-		return `Bearer ${this.token}`;
+		return Cookie.get('travel_storage__cookie');
+		// return `Bearer ${this.token}`;
 	}
 
 	get expiresAt() {
