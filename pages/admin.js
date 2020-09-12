@@ -9,11 +9,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useRouter } from 'next/router';
 
-import instance from '../services/axios';
-
-
 import Header from '../components/Header';
 import EnhancedTable from '../components/BlogTable';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -72,7 +70,7 @@ AdminDrawer.propTypes = {
 };
 
 export async function getStaticProps() {
-	const res = await instance('/api/posts');
+	const res = await axios('https://kh-blog-app.herokuapp.com/api/v1/articles/');
 	const posts = res.data;
 	
 	return {

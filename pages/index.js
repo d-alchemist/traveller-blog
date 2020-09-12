@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Copyright from '../components/Copyright';
 import CardComponent from '../components/Card';
 import Header from '../components/Header';
-import instance from '../services/axios';
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
 	hero: {
@@ -70,7 +70,7 @@ export default function Index({ posts }) {
 }
 
 export async function getStaticProps() {
-	const res = await instance('/api/posts');
+	const res = await axios('https://kh-blog-app.herokuapp.com/api/v1/articles/');
 	const posts = res.data;
 	return {
 		props: {

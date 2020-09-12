@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 
 import Copyright from '../../components/Copyright';
 import Header from '../../components/Header';
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
 	postImage: {
@@ -148,7 +149,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-	const res = await instance('/api/posts');
+	const res = await axios('https://kh-blog-app.herokuapp.com/api/v1/articles/');
     const posts = res.data;
 	const getPath = posts.articles.data.map((post) => {
 		return { id: `${post.id.toString()}` };
