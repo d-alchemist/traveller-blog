@@ -194,6 +194,7 @@ export const postLogin = async (input) => {
 			'Access-Control-Allow-Credentials': true,
 			'Access-Control-Allow-Methods': 'POST',
 			'Access-Control-Allow-Origin': '*',
+			mode: 'no-cors',
 		},
 		timeout: 20000,
 	});
