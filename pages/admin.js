@@ -8,7 +8,8 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useRouter } from 'next/router';
-import fetch from 'node-fetch';
+
+import instance from '../services/axios';
 
 
 import Header from '../components/Header';
@@ -71,14 +72,13 @@ AdminDrawer.propTypes = {
 };
 
 export async function getStaticProps() {
-	const res = await fetch('https://kh-blog-app.herokuapp.com/api/v1/articles');
-	const posts = await res.json();
+	const res = await instance('/api/posts');
+	const posts = res.data;
 	
 	return {
 		props: {
 			posts,
 		},
-		unstable_revalidate: 10,
 	};
 }
 
