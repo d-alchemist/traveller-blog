@@ -193,7 +193,7 @@ export const postLogin = async (input) => {
 			'Content-Type': 'application/json',
 			'Access-Control-Allow-Credentials': true,
 			'Access-Control-Allow-Methods': 'POST',
-			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Origin': 'https://kh-blog-app.herokuapp.com',
 			mode: 'no-cors',
 		},
 		timeout: 20000,
