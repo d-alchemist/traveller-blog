@@ -191,6 +191,9 @@ export const postLogin = async (input) => {
 		body: JSON.stringify(input),
 		headers: {
 			'Content-Type': 'application/json',
+			'Access-Control-Allow-Credentials': true,
+			'Access-Control-Allow-Methods': 'POST',
+			'Access-Control-Allow-Origin': '*',
 		},
 		timeout: 20000,
 	});
