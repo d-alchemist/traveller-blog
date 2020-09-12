@@ -8,9 +8,10 @@ import { Toolbar } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withRouter, useRouter } from 'next/router';
-import fetch from 'node-fetch';
 import PropTypes from 'prop-types';
 import { green, red } from '@material-ui/core/colors';
+
+import instance from '../services/axios';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -72,13 +73,12 @@ function editpost({ posts }) {
 		[classes.buttonFailure]: success === false,
 	});
 
-
 	const handleBackClick = (e) => {
 		e.preventDefault();
 		router.push('/admin');
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const body = { title: postTitle, content: postBody };
 
@@ -88,21 +88,20 @@ function editpost({ posts }) {
 		}
 		setLoading(true);
 
-		fetch(`https://kh-blog-app.herokuapp.com/api/v1/articles/${posts.id}`, {
-			method: 'put',
-			body: JSON.stringify(body),
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
-			},
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.title === postTitle) {
+		await instance
+			.put(`/api/post/${posts.id}`, body, {
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
+				},
+			})
+			.then((res) => {
+				if (res.status === 200 && res.data.title === postTitle) {
 					setSuccess(true);
 					setLoading(false);
 					router.push('/admin');
+					return;
 				}
+				setSuccess(false);
 			});
 	};
 
@@ -164,10 +163,8 @@ function editpost({ posts }) {
 }
 
 editpost.getInitialProps = async (context) => {
-	const res = await fetch(
-		`https://kh-blog-app.herokuapp.com/api/v1/articles/${context.query.id}`
-	);
-	const posts = await res.json();
+	const res = await instance(`/api/post/${context.query.id}`);
+	const posts = res.data;
 	return { posts };
 };
 

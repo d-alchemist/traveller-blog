@@ -19,9 +19,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import EditIcon from '@material-ui/icons/Edit';
-import fetch from 'node-fetch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useRouter } from 'next/router';
+
+import instance from '../services/axios';
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -148,10 +149,8 @@ const EnhancedTableToolbar = (props) => {
 
 	const handleDelete = async () => {
 		await selectedPost.forEach((post) => {
-			fetch(`https://kh-blog-app.herokuapp.com/api/v1/articles/${post}`, {
-				method: 'DELETE',
+			instance.delete(`/api/post/${post}`, {
 				headers: {
-					'Content-type': 'application/json',
 					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
 				},
 			});

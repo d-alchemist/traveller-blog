@@ -7,10 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { AuthToken } from '../services/authtoken';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import fetch from 'node-fetch';
 import clsx from 'clsx';
 import { green, red } from '@material-ui/core/colors';
 import { validateEmail } from '../services/validateEmail';
+
+import instance from '../services/axios';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -104,6 +105,7 @@ export default function Register() {
 			</Typography>
 			<form className={classes.form} onSubmit={handleSubmit} noValidate>
 				<TextField
+					error={success === false}
 					variant="outlined"
 					margin="normal"
 					required
@@ -113,7 +115,10 @@ export default function Register() {
 					name="username"
 					autoComplete="username"
 					autoFocus
-					onChange={(e) => setUsername(e.target.value)}
+					onChange={(e) => {
+						setUsername(e.target.value);
+						setSuccess(null);
+					}}
 				/>
 				<TextField
 					error={success === false}
@@ -126,7 +131,10 @@ export default function Register() {
 					name="email"
 					type="email"
 					autoComplete="email"
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={(e) => {
+						setEmail(e.target.value);
+						setSuccess(null);
+					}}
 				/>
 				<TextField
 					error={success === false}
@@ -139,7 +147,10 @@ export default function Register() {
 					type="password"
 					id="password"
 					autoComplete="new-password"
-					onChange={(e) => setPassword(e.target.value)}
+					onChange={(e) => {
+						setPassword(e.target.value);
+						setSuccess(null);
+					}}
 				/>
 				<FormControlLabel
 					control={<Checkbox value="remember" color="primary" />}
@@ -179,21 +190,15 @@ export default function Register() {
 }
 
 export const postRegister = async (input) => {
-	const result = await fetch(`https://kh-blog-app.herokuapp.com/register`, {
-		method: 'POST',
-		body: JSON.stringify(input),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		timeout: 20000,
-	});
-	return result.json().then((res) => {
-		if (res.email === input.email && res.token) {
-			sessionStorage.setItem('myblogdata', res.token);
-			AuthToken.storeToken(res.token);
-			return true;
-		} else if (res.message.error === 'User already registered') {
-			return false;
-		}
-	});
+	const result = await instance.post('/api/register', input);
+	if (result.status === 200 && result.data.email === input.email && result.data.token) {
+		sessionStorage.setItem('myblogdata', result.data.token);
+		AuthToken.storeToken(result.data.token);
+		return true;
+	} else if (
+		result.status === 400 ||
+		result.message.error === 'User already registered'
+	) {
+		return false;
+	}
 };

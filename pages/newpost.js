@@ -8,9 +8,9 @@ import { Toolbar } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router';
-import fetch from 'node-fetch';
 
 import Header from '../components/Header';
+import instance from '../services/axios';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -56,7 +56,7 @@ export default function newpost() {
 	const classes = useStyles();
 	const [postTitle, setPostTitle] = useState('');
 	const [postBody, setPostBody] = useState('');
-	
+
 	const [success, setSuccess] = React.useState(null);
 	const [loading, setLoading] = React.useState(false);
 
@@ -72,7 +72,7 @@ export default function newpost() {
 		router.push('/admin');
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const body = { title: postTitle, content: postBody };
 
@@ -81,20 +81,24 @@ export default function newpost() {
 			return;
 		}
 		setLoading(true);
-		fetch('https://kh-blog-app.herokuapp.com/api/v1/articles', {
-			method: 'post',
-			body: JSON.stringify(body),
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
-			},
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.title === postTitle) {
+		
+		await instance
+			.post('/api/submit', body, {
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
+				},
+			})
+			.then((res) => {
+				if (
+					res.status === 200 ||
+					(res.status === 201 && res.data.title === body.title)
+				) {
 					setSuccess(true);
 					setLoading(false);
 					router.push('/admin');
+				} else {
+					setSuccess(false);
+					setLoading(false);
 				}
 			});
 	};

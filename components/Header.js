@@ -77,6 +77,7 @@ export default function Header(props) {
 
 	const clearCookie = () => {
 		Cookie.remove('travel_storage__cookie');
+		sessionStorage.removeItem('myblogdata');
 		router.push('/');
 	};
 

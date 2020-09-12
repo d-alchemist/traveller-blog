@@ -9,7 +9,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import fetch from 'node-fetch';
+import instance from '../services/axios';
 import { green, red } from '@material-ui/core/colors';
 
 import { AuthToken } from '../services/authtoken';
@@ -73,7 +73,7 @@ export default function SignIn() {
 			setSuccess(false);
 			return;
 		}
-		
+
 		if (email.length && password.length) {
 			setLoading(true);
 			postLogin({ email, password }).then((res) => {
@@ -121,7 +121,7 @@ export default function SignIn() {
 					onKeyPress={handleKeyPress}
 					onChange={(e) => {
 						setEmail(e.target.value);
-						setSuccess(undefined);
+						setSuccess(null);
 					}}
 				/>
 				<TextField
@@ -138,7 +138,7 @@ export default function SignIn() {
 					onKeyPress={handleKeyPress}
 					onChange={(e) => {
 						setPassword(e.target.value);
-						setSuccess(undefined);
+						setSuccess(null);
 					}}
 				/>
 				<FormControlLabel
@@ -147,7 +147,7 @@ export default function SignIn() {
 				/>
 				{success === false ? (
 					<Typography
-						style={{ textAlign: "center", color: "#e73535" }}
+						style={{ textAlign: 'center', color: '#e73535' }}
 						variant="subtitle2"
 						display="block"
 						gutterBottom
@@ -186,25 +186,12 @@ export default function SignIn() {
 }
 
 export const postLogin = async (input) => {
-	const result = await fetch(`https://kh-blog-app.herokuapp.com/login`, {
-		method: 'post',
-		body: JSON.stringify(input),
-		headers: {
-			'Content-Type': 'application/json',
-			'Access-Control-Allow-Credentials': true,
-			'Access-Control-Allow-Methods': 'POST',
-			'Access-Control-Allow-Origin': 'https://kh-blog-app.herokuapp.com',
-			mode: 'no-cors',
-		},
-		timeout: 20000,
-	});
-	return result.json().then((res) => {
-		if (res.email === input.email && res.token) {
-			sessionStorage.setItem('myblogdata', res.token);
-			AuthToken.storeToken(res.token);
-			return true;
-		} else if (res.message === 'You are not registered!') {
-			return false;
-		}
-	});
+	const result = await instance.post('/api/verify', input);
+	if (result.status === 200 && result.data.email === input.email) {
+		sessionStorage.setItem('myblogdata', result.data.token);
+		AuthToken.storeToken(result.data.token);
+		return true;
+	} else if (result.message === 'You are not registered!') {
+		return false;
+	}
 };
