@@ -11,6 +11,7 @@ A list of commonly used resources that I find helpful are listed in the acknowle
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 * [React](https://reactjs.org)
 * [NextJS](https://nextjs.org)
+* [MaterialUI](https://material-ui.com/)
 
 
 <!-- GETTING STARTED -->
@@ -30,7 +31,7 @@ npm install npm@latest -g
 
 1. Clone the repo
 ```sh
-git clone https://github.com/despeakableme/traveller-blog.git
+git clone https://github.com/optimusme/traveller-blog.git
 ```
 2. Install NPM packages
 ```sh
