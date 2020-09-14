@@ -69,7 +69,7 @@ AdminDrawer.propTypes = {
 	posts: PropTypes.object
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	const res = await axios('https://kh-blog-app.herokuapp.com/api/v1/articles/');
 	const posts = res.data;
 	

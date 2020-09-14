@@ -153,7 +153,7 @@ export async function getStaticPaths() {
     const posts = res.data;
 	const getPath = posts.articles.data.map((post) => {
 		return { id: `${post.id.toString()}` };
-    });
+	});
     
     // fetch index of all the posts and index them
 

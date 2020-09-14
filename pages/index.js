@@ -69,7 +69,7 @@ export default function Index({ posts }) {
 	);
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	const res = await axios('https://kh-blog-app.herokuapp.com/api/v1/articles/');
 	const posts = res.data;
 	return {
