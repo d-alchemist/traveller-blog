@@ -11,10 +11,9 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import { Box } from '@material-ui/core';
-// import Link from 'next/link';
 import { useRouter } from 'next/router'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
@@ -22,7 +21,10 @@ const useStyles = makeStyles(() => ({
     },
     details: {
 		display: 'flex',
-		flexDirection: 'row',
+        flexDirection: 'row',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
 	},
     typeContent: {
         marginTop: '2.5rem',
