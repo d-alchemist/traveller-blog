@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 
 import Header from '../components/Header';
 import instance from '../services/axios';
+import withPrivate from '../components/withPrivate';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function newpost() {
+function newpost() {
 	const classes = useStyles();
 	const [postTitle, setPostTitle] = useState('');
 	const [postBody, setPostBody] = useState('');
@@ -157,3 +158,5 @@ export default function newpost() {
 		</React.Fragment>
 	);
 }
+
+export default withPrivate(newpost);

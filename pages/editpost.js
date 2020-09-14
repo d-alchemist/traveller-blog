@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { green, red } from '@material-ui/core/colors';
 
 import instance from '../services/axios';
+import withPrivate from '../components/withPrivate';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {

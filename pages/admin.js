@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import Header from '../components/Header';
 import EnhancedTable from '../components/BlogTable';
 import axios from 'axios';
+import withPrivate from '../components/withPrivate';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -37,7 +38,7 @@ function AdminDrawer({ posts }) {
 		e.preventDefault();
 		router.push('/newpost');
 	};
-	
+
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -74,10 +75,11 @@ export async function getServerSideProps() {
 	const posts = res.data;
 	
 	return {
+
 		props: {
 			posts,
 		},
 	};
 }
 
-export default AdminDrawer;
+export default withPrivate(AdminDrawer);
