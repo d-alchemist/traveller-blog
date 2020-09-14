@@ -142,7 +142,7 @@ function Post({ post }) {
 }
 
 export async function getStaticProps({ params }) {
-    const res = await instance(`/api/post/${params.id}`);
+    const res = await instance(`https://kh-blog-app.herokuapp.com/api/v1/articles/${params.id}`);
 	const post = res.data;
 	// Pass post data to the page via props
 	return { props: { post } };
