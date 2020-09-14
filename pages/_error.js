@@ -1,30 +1,20 @@
 import React from 'react';
 import Router from 'next/router';
-
-const style = {
-	body: {
-		background: '#000',
-		height: '100vh',
-		width: '100vw',
-	},
-	bodyText: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: '#fff',
-		textAlign: 'center',
-	},
-};
+import classes from './styles/error.module.css';
 
 function Error({ statusCode }) {
 	return (
-		<div style={style.body}>
-			<h1>{statusCode}</h1>
-			<h1 style={style.bodyText}>
-				WE ARE EXPERIENCING SOME TECHNICAL DIFFICULTIES
-				<br />
-				WILL BE WITH YOU SHORTLY
-			</h1>
+		<div className={classes.idnotfound}>
+			<div className={classes.notfound}>
+				<div className={classes.notfoundfour}>
+					<h1>404</h1>
+				</div>
+				<h2>Oops! This Page Could Not Be Found</h2>
+				<p>
+					Sorry but the page you are looking for does not exist, have been
+					removed. name changed or is temporarily unavailable
+				</p>
+			</div>
 		</div>
 	);
 }

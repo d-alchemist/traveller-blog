@@ -56,7 +56,7 @@ export default function Index({ posts }) {
 				</Typography>
 				<Grid container spacing={4}>
 					{posts['articles']['data'].map((post, key) => (
-						<Grid item sm={6} xs={12} key={key}>
+						<Grid item lg={6} xs={12} md={6} key={key}>
 							<CardComponent allPosts={post} />
 						</Grid>
 					))}
