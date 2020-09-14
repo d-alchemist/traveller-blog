@@ -75,6 +75,10 @@ export default function Header(props) {
 	const classes = useStyles();
 	const router = useRouter();
 
+	const isLoggedIn = () => {
+		return Cookie.get('travel_storage__cookie') ? true : false;
+	}
+
 	const clearCookie = () => {
 		Cookie.remove('travel_storage__cookie');
 		sessionStorage.removeItem('myblogdata');
@@ -102,9 +106,9 @@ export default function Header(props) {
 							The Traveller
 						</Link>
 					</Typography>
-					{props.isHomepage ? (
+					{props.isHomepage && !isLoggedIn() ? (
 						<LoginButton />
-					) : props.isDashboard ? (
+					) : props.isDashboard || isLoggedIn() ? (
 						<LogOutButton />
 					) : (
 						''

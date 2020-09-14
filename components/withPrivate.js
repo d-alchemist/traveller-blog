@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import Router from 'next/router';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,11 +19,7 @@ const login = '/login?redirected=true';
 
 export default (WrappedComponent) => {
 	const checkAuthentication = () => {
-		const hasCookie = Cookies.get('travel_storage__cookie');
-		if (hasCookie) {
-			return true;
-		}
-		return false;
+		return Cookie.get('travel_storage__cookie') ? true : false;
 	};
 
 	const hocComponent = ({ ...props }) => {
