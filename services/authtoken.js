@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import Cookie from "js-cookie";
 import Router from "next/router";
+import { COOKIE_NAME } from './constants';
 
 export class AuthToken {
 
@@ -17,7 +18,7 @@ export class AuthToken {
 	}
 
 	get authorizationString() {
-		return Cookie.get('travel_storage__cookie');
+		return Cookie.get(COOKIE_NAME);
 		// return `Bearer ${this.token}`;
 	}
 
@@ -34,7 +35,7 @@ export class AuthToken {
     }
     
     static async storeToken(token) {
-        Cookie.set('travel_storage__cookie', token);
+        Cookie.set(COOKIE_NAME, token);
         await Router.push("/admin");
     }
 }

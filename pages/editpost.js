@@ -13,6 +13,7 @@ import { green, red } from '@material-ui/core/colors';
 
 import instance from '../services/axios';
 import withPrivate from '../components/withPrivate';
+import { SESSION_NAME } from '../services/constants';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -92,7 +93,7 @@ function editpost({ posts }) {
 		await instance
 			.put(`/api/post/${posts.id}`, body, {
 				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
+					Authorization: `Bearer ${sessionStorage.getItem(SESSION_NAME)}`,
 				},
 			})
 			.then((res) => {

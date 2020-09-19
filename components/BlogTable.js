@@ -23,6 +23,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useRouter } from 'next/router';
 
 import instance from '../services/axios';
+import { SESSION_NAME } from '../services/constants';
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -151,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
 		await selectedPost.forEach((post) => {
 			instance.delete(`/api/post/${post}`, {
 				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
+					Authorization: `Bearer ${sessionStorage.getItem(SESSION_NAME)}`,
 				},
 			});
 		});

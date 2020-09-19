@@ -12,6 +12,7 @@ import { green, red } from '@material-ui/core/colors';
 import { validateEmail } from '../services/validateEmail';
 
 import instance from '../services/axios';
+import { SESSION_NAME } from '../services/constants';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -81,7 +82,7 @@ export default function Register() {
 			return;
 		}
 
-		if (email.length && username.length && password.length) {
+		if (email.length && username.length > 2 && password.length > 2) {
 			setLoading(true);
 			postRegister({ email, password, username }).then((res) => {
 				if (res === true) {
@@ -192,7 +193,7 @@ export default function Register() {
 export const postRegister = async (input) => {
 	const result = await instance.post('/api/register', input);
 	if (result.status === 200 && result.data.email === input.email && result.data.token) {
-		sessionStorage.setItem('myblogdata', result.data.token);
+		sessionStorage.setItem(SESSION_NAME, result.data.token);
 		AuthToken.storeToken(result.data.token);
 		return true;
 	} else if (

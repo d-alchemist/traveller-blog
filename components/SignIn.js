@@ -14,6 +14,7 @@ import { green, red } from '@material-ui/core/colors';
 
 import { AuthToken } from '../services/authtoken';
 import { validateEmail } from '../services/validateEmail';
+import { SESSION_NAME } from '../services/constants';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -188,7 +189,7 @@ export default function SignIn() {
 export const postLogin = async (input) => {
 	const result = await instance.post('/api/verify', input);
 	if (result.status === 200 && result.data.email === input.email) {
-		sessionStorage.setItem('myblogdata', result.data.token);
+		sessionStorage.setItem(SESSION_NAME, result.data.token);
 		AuthToken.storeToken(result.data.token);
 		return true;
 	} else if (result.message === 'You are not registered!') {

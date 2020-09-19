@@ -3,6 +3,7 @@ import Cookie from 'js-cookie';
 import Router from 'next/router';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles } from '@material-ui/core/styles';
+import { COOKIE_NAME } from '../services/constants';
 
 const useStyles = makeStyles({
 	skelroot: {
@@ -19,7 +20,7 @@ const login = '/login?redirected=true';
 
 export default (WrappedComponent) => {
 	const checkAuthentication = () => {
-		return Cookie.get('travel_storage__cookie') ? true : false;
+		return Cookie.get(COOKIE_NAME) ? true : false;
 	};
 
 	const hocComponent = ({ ...props }) => {

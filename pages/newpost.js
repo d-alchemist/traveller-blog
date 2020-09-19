@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import Header from '../components/Header';
 import instance from '../services/axios';
 import withPrivate from '../components/withPrivate';
+import { SESSION_NAME } from '../services/constants';
 
 const useStyles = makeStyles((theme) => ({
 	newTitle: {
@@ -86,7 +87,7 @@ function newpost() {
 		await instance
 			.post('/api/submit', body, {
 				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem('myblogdata')}`,
+					Authorization: `Bearer ${sessionStorage.getItem(SESSION_NAME)}`,
 				},
 			})
 			.then((res) => {

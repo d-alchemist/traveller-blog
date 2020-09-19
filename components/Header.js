@@ -8,6 +8,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Typography from '@material-ui/core/Typography';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/router';
+import { COOKIE_NAME, SESSION_NAME } from '../services/constants';
 
 function ElevationScroll(props) {
 	const { children, window } = props;
@@ -76,12 +77,12 @@ export default function Header(props) {
 	const router = useRouter();
 
 	const isLoggedIn = () => {
-		return Cookie.get('travel_storage__cookie') ? true : false;
+		return Cookie.get(COOKIE_NAME) ? true : false;
 	}
 
 	const clearCookie = () => {
-		Cookie.remove('travel_storage__cookie');
-		sessionStorage.removeItem('myblogdata');
+		Cookie.remove(COOKIE_NAME);
+		sessionStorage.removeItem(SESSION_NAME);
 		router.push('/');
 	};
 
